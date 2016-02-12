@@ -2,73 +2,37 @@
 This repository contains the famous algorithmic code of graphs that are implemented in Apache Giraph.
 Algorithms implemented
 
-1. Single Source Shortest Path (It comes with the default examples in Giraph)
-2. PageRank Algorithm
-3. Stochastic Gradient Descend (Used Agrregrator Class)
-4. Label Propagation Algorithm
-5. InDegree and OutDegree
-6. MaxComputation
+1. Label Propagation Algorithm
+2. Stochastic Gradient Descend (Used Agrregrator Class)
 
 ###Following are the screenshots and the conceots describing the above algorithms
-**Note** InDegree OutDegree and MaxComputation is not explained here. It can be easily understood when learning the concepts of graphs or you can Google it.
 
-#### Single Source Shortest Path
-
-An algorithm to search for the shortest path(s) between two vertices—or the shortest path between a
-vertex and any other (reachable) vertex—is called a single-source shortest paths (SSSP) algorithm. A very
-intuitive and simple algorithm that can be used to this end is the so-called breadth-first search (BFS). 1
-Starting from a source vertex, the algorithm visits all its neighbors. These neighbors are considered to be at
-distance 1, because they are separated from the source vertex by one edge. The next vertices to be visited are
-the neighbors of these neighbors, except those that have been already visited. These vertices are considered
-to be at distance 2 from the source, or one hop more distant than the vertices they were visited from. The
-algorithm continues like this until all vertices have been visited and all distances have been computed.
-Intuitively, the way BFS visits the vertices in a graph starting from a source vertex follows a wave-like
-pattern, just like the waves produced on a flat surface by a stone thrown into water. The paths are explored in
-breadth, all of them one hop at a time.
-
-In the case of a weighted graph, edge weights represent distances between neighbors. Hence, the length
-of a path is computed as the sum of the weights of the edges that constitute the path. To support weights, the
-algorithm has to be slightly modified. Screenshot below shows the execution of SSSP on a weighted graph starting
-from the leftmost vertex, Mark. Any time vertices are visited, instead of adding one hop to the distance of
-the vertices they were visited from, the weight of the traversed edge is added. Look, for example, at how
-the distance of John is defined as the weight of the edge that connects him to Mark, and how the distance
-of Peter is this value plus the distance from John. If a vertex is visited multiple times, either in the same
-iteration or in a future one, its distance is updated only if the distance has improved.
-
-![](https://raw.githubusercontent.com/LakshayNagpal/Algos-in-giraph/master/images/SSSP.png)
-
-#### PageRank
-
-Imagine that you were to open your browser and point it to a
-random URL (assuming you could pick a valid URL at random). You would then click a random link on the
-page and jump to that page. You would follow this procedure forever: an infinitely long sequence of random
-clicks from page to page. The question is, would you end up on certain pages more often than on others?
-After all, if a page is important on the Web, there should be many links pointing to that page. More links means more probability of clicking such links and more probability of ending up on certain pages. Moreover,
-it should be safe to assume that important pages often contain links to other important pages. This increases
-the likelihood of clicking a link to an important page.
-
-The formula used in the famous PageRank Algorithm is 
-![](https://raw.githubusercontent.com/LakshayNagpal/Algos-in-giraph/master/images/pagerank1.png)
-
-One thing to notice in the definition of the PageRank is that it is recursive. The PageRank of each page
-depends on the PageRank of the incoming neighbors. How can you then compute the PageRank values?
-Every vertex PageRank depends on that of its neighbors. You need a starting point. Well, you can assign
-an initial value to each page and then iteratively compute the new PageRank value for each page with the
-formula. Although each vertex starts with the same initial value—typically 1 divided by the number of
-vertices in the graph—to mimic the initial random choice of page to start the random surf, iteration after
-iteration certain pages collect a higher PageRank due to the underlying structure of the graph. After some
-iterations, the PageRank values converge to stability, meaning the values change only slightly between the
-previous value and the next one.
-
-
-The concept is explained below diagramatically
-![](https://raw.githubusercontent.com/LakshayNagpal/Algos-in-giraph/master/images/pagerank2.png)
-![](https://raw.githubusercontent.com/LakshayNagpal/Algos-in-giraph/master/images/pagerank3.png)
-![](https://raw.githubusercontent.com/LakshayNagpal/Algos-in-giraph/master/images/pagerank4.png)
 
 #### Stochastic Gradient Descend
 The formula used in SGD is 
 ![](https://raw.githubusercontent.com/LakshayNagpal/Algos-in-giraph/master/images/SGD.png)
+
+A sample input for SGD :
+
+[0,53,[[5,3],[7,2]]]
+[2,26,[[1,3],[3,4]]]
+[4,50,[[3,5],[5,1]]]
+[6,12,[[7,3]]]
+[1,57,[[2,3]]]
+[3,14,[[2,4],[4,5]]]
+[5,79,[[0,3],[4,1]]]
+[7,85,[[0,2],[6,3]]]
+
+The Output is as follows :
+
+0	61.490045658068404
+1	57.792721810904986
+2	27.353103488114787
+3	14.395696686140393
+4	56.53684400949615
+5	86.14754281050081
+6	15.487349502178727
+7	89.81843043854076
 
 The concept used is:
 
@@ -89,6 +53,45 @@ of her fans should be “Lady Gaga”. In that case, the vertex propagates the l
 message. The algorithm halts when no vertex changes label. At the end of the computation, each vertex
 holds the label representing its community. This label corresponds to the ID of a vertex in its community—a
 vertex that is more “central” to the community it represents (in this example, “Lady Gaga”).
+
+A sample Input :
+
+[1,1,[[3,0],[11,0],[16,0]]]
+[3,1,[[1,0],[16,0]]]
+[16,16,[[1,0],[11,0],[3,0],[13,0],[10,0],[12,0]]]
+[11,1,[[1,0],[16,0],[13,0]]]
+[13,1,[[11,0],[16,0]]]
+[6,6,[[10,0],[14,0]]]
+[10,10,[[6,0],[14,0],[7,0],[15,0],[16,0],[12,0]]]
+[14,6,[[7,0],[10,0],[6,0]]]
+[7,6,[[15,0],[10,0],[14,0]]]
+[15,15,[[10,0],[7,0]]]
+[12,3,[[16,0],[4,0],[2,0],[8,0],[9,0],[5,0],[10,0]]]
+[4,4,[[2,0],[12,0]]]
+[2,2,[[4,0],[12,0],[8,0]]]
+[8,8,[[12,0],[2,0],[9,0]]]
+[9,9,[[8,0],[2,0],[5,0]]]
+[5,5,[[2,0],[9,0]]]
+
+The Output is as follows
+
+1	1.0
+2	2.0
+3	1.0
+4	2.0
+5	2.0
+6	6.0
+7	6.0
+8	2.0
+9	2.0
+10	6.0
+11	1.0
+12	2.0
+13	1.0
+14	6.0
+15	6.0
+16	1.0
+
 
 ![](https://raw.githubusercontent.com/LakshayNagpal/Algos-in-giraph/master/images/LPA1.png)
 ![](https://raw.githubusercontent.com/LakshayNagpal/Algos-in-giraph/master/images/LPA2.png)
